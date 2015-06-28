@@ -10,12 +10,10 @@ class Game
   def play
     board.render
     until won?
-      pos = get_pos
-      value = get_value
+      pos, value = get_pos, get_value
       until valid?(pos, value)
         puts "Invalid!"
-        pos = get_pos
-        value = get_value
+        pos, value = get_pos, get_value
       end
       @board.assign_value(pos, value)
       board.render
@@ -36,18 +34,20 @@ class Game
   end
 
   def get_pos
-    puts "Which position to change?"
+    puts "Enter a position to change: "
     gets.chomp.split(", ").map(&:to_i)
   end
 
   def get_value
-    puts "Which value to change to?"
+    puts "Enter a value: "
     gets.chomp
   end
 
 
 end
 
-filename = ARGV.shift
-g = Game.new(filename)
-g.play
+if __FILE__ == $PROGRAM_NAME
+  filename = ARGV.shift
+  g = Game.new(filename)
+  g.play
+end

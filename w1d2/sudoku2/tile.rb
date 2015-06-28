@@ -1,10 +1,13 @@
+require "colorize"
+
 class Tile
 
-  attr_accessor :value, :given
+  attr_accessor :value, :given, :color
 
   def initialize(value = nil, given = false)
     @value = value
     @given = given
+    @color = given ? :green : :white
   end
 
   def to_s

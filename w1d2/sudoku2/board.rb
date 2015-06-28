@@ -23,7 +23,7 @@ class Board
   end
 
   def get_column(index)
-    transposed = transpose
+    transposed = @board.transpose
     transposed[index]
   end
 
@@ -76,11 +76,12 @@ class Board
   end
 
   def render
+    system("clear")
     @board.each_with_index do |row, i|
       string = ""
       row.each_with_index do |el, j|
         string += "|" if j % 3 == 0
-        string += " #{el.to_s} "
+        string += " #{el.to_s.colorize(el.color)} "
       end
       puts "-" * 31 if i % 3 == 0
       puts string + "|"
@@ -89,20 +90,7 @@ class Board
   end
 
   def complete?
-    p @board.any? { |row| row.map{ |el| el.value }.compact.length < 9 }
     !@board.any? { |row| row.map{ |el| el.value }.compact.length < 9 }
-  end
-
-  def transpose
-    transposed = Array.new
-    (0...9).each do |row|
-      line = Array.new
-      (0...9).each do |col|
-        line << self[[col, row]]
-      end
-      transposed << line
-    end
-    transposed
   end
 
   def assign_value(pos, value)
@@ -120,6 +108,3 @@ class Board
   end
 
 end
-
-b = Board.import_board("./puzzles/sudoku1.txt")
-b.render
