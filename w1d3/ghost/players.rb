@@ -33,7 +33,6 @@ class HumanPlayer < Player
     gets.chomp
   end
 
-
 end
 
 class AiPlayer < Player
@@ -51,24 +50,16 @@ class AiPlayer < Player
 
   def make_guess(game)
     @fragment = game.fragment
+    return rand("a".ord.."z".ord).chr if @fragment.length == 0
     letter = winning_move(game.num_players) || first_available_move
     puts letter == "bs" ? "I declare BS!!" : "I append the letter #{letter}"
     return letter
   end
 
-  # def winning_move(total_players)
-  #   cw = candidate_words(total_players).select { |word| can_come_back?(word, total_players) && has_longer_words?(word) }
-  #   return cw.empty? ? nil : cw.first[@fragment.length]
-  # end
-
   def winning_move(total_players)
-    cw = candidate_words(total_players).select { |word| !can_come_back?(word, total_players) && has_longer_words?(word) }
-    if cw.empty?
-      return nil
-    else
-      puts "I just played a winning move"
-      cw.first[@fragment.length]
-    end
+    cw = candidate_words(total_players)
+    cw.each { |word| return word[@fragment.length] if !losing_word?(cw, word, total_players) }
+    return nil if cw.empty?
   end
 
   def first_available_move
@@ -88,21 +79,21 @@ class AiPlayer < Player
   end
 
   private
-
   def candidate_words(total_players)
     words.select do |word|
-      word[0...@fragment.length] == @fragment &&
-        (word.length - @fragment.length) < total_players
+      word[0...@fragment.length] == @fragment 
     end
   end
 
-  def can_come_back?(word, total_players)
-    !words.any? { |word2| word2[0...word.length] && (word.length - @fragment.length) >= total_players}
-  end
-
-  def has_longer_words?(word)
-    words.any? { |other_word| other_word[0..@fragment.length] == word[0..@fragment.length] &&
-                  other_word.length > @fragment.length + 1 }
+  def losing_word?(candidate_words, word, total_players)
+    has_longer = false
+    candidate_words.each do |other_word|
+      if other_word[0..@fragment.length] == word[0..@fragment.length]
+        return true if other_word.length - @fragment.length >= total_players
+      end
+      has_longer = other_word.length >= @fragment.length + 2
+    end
+    false && has_longer
   end
 
   def import_dictionary

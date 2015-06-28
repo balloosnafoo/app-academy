@@ -63,7 +63,8 @@ class Game
   def handle_guess(guess)
     if guess == 'bs'
       defense = @previous_player.defend_guess(@fragment)
-      @loser = @dictionary[defense] ? @current_player : @previous_player
+      valid_defense = @dictionary[defense] && defense[0...-1] == @fragment
+      @loser = valid_defense ? @current_player : @previous_player
     else
       @fragment += guess
     end
@@ -84,6 +85,6 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-  g = Game.new(HumanPlayer.new("Matt"), HumanPlayer.new("Matthew"), AiPlayer.new)
+  g = Game.new(HumanPlayer.new("Matt"), AiPlayer.new)
   g.run
 end
