@@ -12,6 +12,7 @@ class Game
   end
 
   def play
+    @board.display
     players = [@player1, @player2]
     until over? do
       move = players[turn % 2].get_move
@@ -22,13 +23,14 @@ class Game
     puts "Player #{1 + @turn % 2} wins!"
   end
 
-
   def over?
     @board.win?
   end
 
-
 end
 
-g = Game.new
-g.play
+
+if __FILE__ == $PROGRAM_NAME
+  g = Game.new
+  g.play
+end

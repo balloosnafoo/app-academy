@@ -32,18 +32,16 @@ class Board
   end
 
   def display
+    system("clear")
     board = transpose
     board.reverse.each do |row|
       row.each do |piece|
-        print "|"
-        print !piece.nil? ? "O".colorize(piece) : " "
-        print "|"
+        print "|#{!piece.nil? ? "O".colorize(piece) : " "}|"
       end
       puts
     end
   end
 
-  #First position => col, Second position => row
   def [](pos)
     col, row = pos
     columns[col][row]
@@ -54,7 +52,7 @@ class Board
     columns[col][row] = value
   end
 
-  #private
+  private
 
   def cols(anchor)
     start_column = anchor[0]
@@ -86,10 +84,6 @@ class Board
     start_column = anchor[0]
     start_row = anchor[1]
 
-    #down_diagonal = (start_column...start_column + 4).map { |idx| self[[idx, idx]] }
-    #up_diagonal = (start_column...start_column + 4).map { |idx| self[[idx, 3-idx]] }
-    #[down_diagonal, up_diagonal]
-
     down_diagonal = []
     (0..3).each do |index|
       down_diagonal << self[[start_column + index, start_row + index]]
@@ -101,14 +95,6 @@ class Board
     end
 
     [down_diagonal, up_diagonal]
-
   end
 
-
 end
-
-b = Board.new
-(0..4).each do |index|
-  b.drop_piece(index, :red)
-end
-puts b.win?
