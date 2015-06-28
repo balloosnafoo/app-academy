@@ -16,9 +16,9 @@ class Game
   def play
     board.populate
     until board.won? || turns.zero?
-      board.render
+      board.render(@turns)
       pos = guess_until_valid
-      board.render
+      board.render(@turns)
       new_information = handle_guess(pos)
       @player.handle_new_information(new_information)
     end
@@ -38,11 +38,10 @@ class Game
   def handle_guess(pos)
     match = false
     if previous_card
-      hide(pos, previous_card) if not board.match?(pos, previous_card)
+      board.match?(pos, previous_card) ? match = true : hide(pos, previous_card)
       @previous_card = nil
-      sleep(2) if not board.won?
+      sleep(2) if !board.won? && !match
       @turns -= 1
-      match = true
     else
       @previous_card = pos
     end
@@ -86,9 +85,14 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   value = ARGV.shift
-  num = 6 if value == "hard"
-  num = 4 if value == "medium"
-  num = 2 if value == "easy"
-  g = Game.new(num, ComputerPlayer.new)
-  g.play
+  if value
+    num = 6 if value == "hard"
+    num = 4 if value == "medium"
+    num = 2 if value == "easy"
+    g = Game.new(num, ComputerPlayer.new)
+    g.play
+  else
+    g = Game.new(4, HumanPlayer.new)
+    g.play
+  end
 end

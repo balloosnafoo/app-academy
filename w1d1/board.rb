@@ -26,8 +26,8 @@ class Board
     @grid[row][col] = letter
   end
 
-  def render
-    #system("clear")
+  def render(turns)
+    system("clear")
     lines = []
     @grid.each do |line|
       string = ""
@@ -35,6 +35,7 @@ class Board
       lines << string
     end
     puts lines.join("\n")
+    puts "You have #{turns} turns left."
   end
 
   def match?(pos1, pos2)
