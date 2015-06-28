@@ -44,7 +44,6 @@ class Keypad
   end
 
   def all_codes_entered?
-    #Come back to this and try other way too!
     (0...10**@code_length).each do |code_integer|
       code = "%04d" % code_integer
       return false if !@code_bank.include?(code.split("").map(&:to_i))
