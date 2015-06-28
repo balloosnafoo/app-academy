@@ -1,29 +1,22 @@
+require "colorize"
+
 class Tile
 
-  attr_accessor :group, :row, :column, :value, :given
+  attr_accessor :value, :given, :color
 
-  def initialize(row, column, group)
-    @group = group
-    @row = row
-    @column = column
-    @value = nil
-    @given = false
-  end
-
-  def in_row?(row)
-    @row == row
-  end
-
-  def in_column?(column)
-    @column == column
-  end
-
-  def in_group?(group)
-    @group == group
+  def initialize(value = nil, given = false)
+    @value = value
+    @given = given
+    @color = given ? :green : :white
   end
 
   def to_s
     @value || " "
+  end
+
+  def ==(other_tile)
+    return true if other_tile.value == @value
+    false
   end
 
 end
