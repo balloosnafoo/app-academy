@@ -15,7 +15,7 @@ class Card
   end
 
   def to_s
-    @revealed ? @letter : " "
+    @revealed ? "#{letter}" : " "
   end
 
   def ==(other_card)

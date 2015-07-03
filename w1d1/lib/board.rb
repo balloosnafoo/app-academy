@@ -49,6 +49,7 @@ class Board
 
   private
 
+
   def blank_grid(num)
     Array.new(num) { Array.new(num) }
   end
